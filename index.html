@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phone Peeking ♡</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5edf5;color:#352c3c;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
+header{text-align:center;padding:20px}
+header h1{margin:0;font-family:Georgia,serif}
+header p{font-size:12px;color:#95849d}
+.phone{width:340px;max-width:94%;margin:auto;background:#242129;padding:9px;border-radius:38px;box-shadow:0 15px 40px #78607c55}
+.screen{background:#fffaff;border-radius:29px;min-height:620px;overflow:hidden}
+.status{display:flex;justify-content:space-between;padding:13px 20px;font-size:12px;font-weight:bold}
+.profile{text-align:center;padding:20px 12px}
+.avatar{width:80px;height:80px;margin:auto;border-radius:50%;background:#eadcf3;display:grid;place-items:center;font-size:36px}
+.profile h2{margin:10px 0 4px}
+.profile p{font-size:13px;color:#8b7b92}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 6px;padding:20px}
+.app{border:0;background:none;color:inherit;cursor:pointer}
+.icon{height:56px;width:56px;border-radius:17px;display:grid;place-items:center;margin:auto auto 6px;font-size:27px}
+.app span{font-size:12px}
+.messages{background:#f4dce8}.photos{background:#ffe2d5}.contacts{background:#dceaff}.notes{background:#fff0bd}.social{background:#d9f1df}.calls{background:#d8f2df}.calendar{background:#ffdfc7}.music{background:#f9dbea}.settings{background:#e8e5ed}
+.bottom{text-align:center;font-size:11px;color:#aa9cb0;padding:8px 10px 20px}
+.panel{display:none;background:#fffaff;padding:14px;min-height:400px}
+.panel h2{font-size:20px}
+button,input,textarea{font:inherit}
+.back,.add{border:0;border-radius:10px;padding:10px;background:#eee2f5;color:#493856;cursor:pointer}
+.entry{background:white;border:1px solid #eee4f0;padding:12px;border-radius:14px;margin:10px 0;overflow-wrap:anywhere}
+.entry strong{display:block;margin-bottom:7px}
+.entry p{white-space:pre-wrap;font-size:14px;line-height:1.5}
+input,textarea{width:100%;padding:11px;border:1px solid #dfd2e6;border-radius:10px;margin:5px 0 10px}
+textarea{min-height:70px}
+.add{background:#9875b2;color:white}
+.editor{max-width:380px;margin:20px auto;padding:15px;background:#fffaff;border-radius:18px}
+.small{font-size:12px;color:#93849b;line-height:1.5}
+</style>
+</head>
+<body>
+<header><h1>Phone Peeking ♡</h1><p>A little peek into their fictional world</p></header>
+
+<div class="phone"><div class="screen">
+<div class="status"><span id="time">9:41</span><span>● ● ● ▰</span></div>
+<div id="home">
+<div class="profile">
+<div class="avatar" id="avatar">🧸</div>
+<h2 id="owner">Your Character</h2>
+<p id="bio">A little world full of secrets.</p>
+</div>
+<div class="grid">
+<button class="app" onclick="openApp('messages')"><div class="icon messages">💬</div><span>ข้อความ</span></button>
+<button class="app" onclick="openApp('contacts')"><div class="icon contacts">👥</div><span>รายชื่อ</span></button>
+<button class="app" onclick="openApp('photos')"><div class="icon photos">🌷</div><span>รูปภาพ</span></button>
+<button class="app" onclick="openApp('notes')"><div class="icon notes">📝</div><span>โน้ต</span></button>
+<button class="app" onclick="openApp('social')"><div class="icon social">📱</div><span>โซเชียล</span></button>
+<button class="app" onclick="openApp('calls')"><div class="icon calls">📞</div><span>ประวัติการโทร</span></button>
+<button class="app" onclick="openApp('calendar')"><div class="icon calendar">📅</div><span>ปฏิทิน</span></button>
+<button class="app" onclick="openApp('music')"><div class="icon music">🎵</div><span>เพลง</span></button>
+<button class="app" onclick="openApp('settings')"><div class="icon settings">⚙️</div><span>ตั้งค่า</span></button>
+</div>
+<div class="bottom">Made with ♡ for storytellers</div>
+</div>
+<div class="panel" id="panel">
+<button class="back" onclick="closeApp()">‹ กลับ</button>
+<h2 id="panelTitle"></h2>
+<div id="entries"></div>
+<div id="form">
+<input id="entryTitle" placeholder="ชื่อ / ผู้ส่ง">
+<textarea id="entryBody" placeholder="เขียนข้อความหรือรายละเอียด..."></textarea>
+<input id="entryDate" placeholder="วันที่ / รายละเอียดเพิ่มเติม">
+<button class="add" onclick="addEntry()">+ เพิ่มรายการ</button>
+</div>
+</div>
+</div></div>
+
+<div class="editor">
+<h3>ปรับแต่งมือถือของตัวละคร ♡</h3>
+<label>ชื่อตัวละคร</label><input id="nameInput" placeholder="เช่น นที">
+<label>อีโมจิประจำตัว</label><input id="avatarInput" value="🧸">
+<label>ข้อความแนะนำตัว</label><input id="bioInput" placeholder="A little world full of secrets.">
+<button class="add" onclick="saveProfile()">บันทึกโปรไฟล์</button>
+<p class="small">ต้นแบบมือถือจำลองสำหรับแต่งฟิค</p>
+</div>
+
+<script>
+const titles={messages:"ข้อความ",contacts:"รายชื่อ",photos:"รูปภาพ",notes:"โน้ต",social:"โซเชียล",calls:"ประวัติการโทร",calendar:"ปฏิทิน",music:"เพลง",settings:"ตั้งค่า"};
+let current="";
+let data={name:"Your Character",avatar:"🧸",bio:"A little world full of secrets.",items:{
+messages:[{title:"Best Friend",body:"ถึงบ้านหรือยัง? 💗",date:"วันนี้"}],
+contacts:[{title:"Best Friend",body:"080-000-0000",date:"ผู้ติดต่อ"}],
+photos:[{title:"A lovely day 🌷",body:"ความทรงจำที่อยากเก็บไว้",date:"รูปภาพ"}],
+notes:[{title:"อย่าลืม",body:"วันสำคัญของเรา ♡",date:"โน้ต"}],
+social:[{title:"@yourcharacter",body:"วันนี้เป็นวันที่ดีจัง ✨",date:"วันนี้"}],
+calls:[{title:"Best Friend",body:"สายที่ไม่ได้รับ",date:"เมื่อวาน"}],
+calendar:[{title:"Special day",body:"วันสำคัญของตัวละคร",date:"กิจกรรม"}],
+music:[{title:"Our song 🎧",body:"เพลงที่ทำให้นึกถึงใครบางคน",date:"เพลง"}]}};
+function persist(){try{localStorage.setItem("phonepeeking",JSON.stringify(data))}catch(e){}}
+function load(){try{let s=localStorage.getItem("phonepeeking");if(s)data=JSON.parse(s)}catch(e){};nameInput.value=data.name;avatarInput.value=data.avatar;bioInput.value=data.bio;renderProfile()}
+function renderProfile(){owner.textContent=data.name;avatar.textContent=data.avatar;bio.textContent=data.bio}
+function saveProfile(){data.name=nameInput.value.trim()||"Your Character";data.avatar=avatarInput.value||"🧸";data.bio=bioInput.value.trim();renderProfile();persist();alert("บันทึกแล้ว!")}
+function openApp(app){current=app;home.style.display="none";panel.style.display="block";panelTitle.textContent=titles[app];form.style.display=app==="settings"?"none":"block";if(app==="settings"){entries.innerHTML='<div class="entry">Phone Peeking ♡<p>มือถือจำลองสำหรับแต่งฟิค</p></div>';return}renderEntries()}
+function closeApp(){panel.style.display="none";home.style.display="block"}
+function renderEntries(){entries.innerHTML="";(data.items[current]||[]).forEach((it,i)=>{let card=document.createElement("div");card.className="entry";let t=document.createElement("strong");t.textContent=it.title;let b=document.createElement("p");b.textContent=it.body;let d=document.createElement("small");d.className="small";d.textContent=it.date||"";let del=document.createElement("button");del.className="back";del.textContent="ลบ";del.onclick=()=>{data.items[current].splice(i,1);persist();renderEntries()};card.append(t,b,d,document.createElement("br"),del);entries.appendChild(card)})}
+function addEntry(){let title=entryTitle.value.trim(),body=entryBody.value.trim(),date=entryDate.value.trim();if(!title&&!body){alert("กรุณาใส่ข้อความ");return}data.items[current].unshift({title:title||"♡",body,date});persist();entryTitle.value="";entryBody.value="";entryDate.value="";renderEntries()}
+time.textContent=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+load();
+</script>
+</body>
+</html>
